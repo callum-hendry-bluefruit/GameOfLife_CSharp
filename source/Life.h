@@ -6,18 +6,25 @@
 #include <array>
 #include <algorithm>
 #include <string>
+#include <chrono>
+#include <thread>
+
+class TestLife;
 
 class Life
 {
+protected:
+    friend class TestLife;
+    static std::vector< std::vector<int> > m_life_grid;
+    static void ToggleCell(int y, int x);
+
 private:
-    std::vector< std::vector<int> > m_life_grid;
     std::array<int, 8> m_current_surroundings;
     int m_size_x;
     int m_size_y;
     char m_scan_cells_current_location_contents;
 
     void InitaliseGrid();
-    void ToggleCell(int y, int x);
     void InitalValues();
     void UserChosenStartLocations();
 
@@ -29,22 +36,18 @@ private:
     bool CheckForThreeLiveNeighboursIfDead(int, int);
 
 public:
-    Life(int y, int x, bool default_values = false); //Bool = true is to use default values
+    Life(int y, int x, int initalisation_state = 1); //initalisation_state; 1 or not provided for default start cells; 0 for user chosen; anything else (preferably 2) for only dead cells
     ~Life();
     void Start(int num_of_generations = 1); //if no variable, assume 1 for testing purposes
     void PrintGrid();
     char GetGridValue(int, int);
 };
 
-#endif
+static void waitForOneSecond()
+{
+    using namespace std::this_thread;
+    using namespace std::chrono;
+    sleep_until(system_clock::now() + milliseconds(1000));
+}
 
-/*
-1. Any live cell with fewer than two live neighbours
-dies, as if caused by underpopulation.
-2. Any live cell with more than three live neighbours
-dies, as if by overcrowding.
-3. Any live cell with two or three live neighbours
-lives on to the next generation.
-4. Any dead cell with exactly three live neighbours
-becomes a live cell.
-*/
+#endif

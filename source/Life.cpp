@@ -1,19 +1,26 @@
 #include "Life.h"
+std::vector< std::vector<int> > Life::m_life_grid = {};
 
-Life::Life(int size_y, int size_x, bool default_values)
+Life::Life(int size_y, int size_x, int initalisation_state)
 {
     m_size_x = size_x;
     m_size_y = size_y;
     std::vector< std::vector< int > > temp_grid(m_size_x, std::vector<int>(m_size_y));
     m_life_grid = temp_grid;
     InitaliseGrid();
-    if (default_values == true)
+    if (initalisation_state == 0)
+    {
+        UserChosenStartLocations();
+    }
+    else if (initalisation_state == 1)
     {
         InitalValues();
+        
     }
     else
     {
-        UserChosenStartLocations();
+        //Nothing; leaves grid initalised only with dead cells
+        //Used for testing initalisation and different starting locations
     }
 }
 
@@ -25,22 +32,29 @@ Life::~Life()
 void Life::Start(int number_of_loops)
 {   
     bool change_made_this_generation = false;
+    int number_of_generations = 0;
+
+    system("cls");
+    PrintGrid();
+    waitForOneSecond();
+
     if (number_of_loops == 0)
     {
-        while (change_made_this_generation == false)
+        while (ScanCells() == true)
         {
-            if (ScanCells() == true)
-            {
-                change_made_this_generation = true;
-            }
-            else
-            {
-                return;
-            }
+            change_made_this_generation = true;
+            number_of_generations += 1;
 
-            for (int i = 0; i < 5000; i++);
-            //Wait timer, to allow user to see each generation
+            system("cls");
+            PrintGrid();
+            std::cout << std::endl;
+            std::cout << "Number of generations: " << number_of_generations << std::endl;
+            waitForOneSecond();
         }
+        std::cout << std::endl;
+        std::cout << "Simulation stopped; end of possible generations" << std::endl;
+        std::cout << "Number of generations: " << number_of_generations << std::endl;
+        return;
     }
     else
     {
@@ -49,19 +63,24 @@ void Life::Start(int number_of_loops)
             if (ScanCells() == true)
             {
                 change_made_this_generation = true;
-            }
-            else
-            {
-                return;
+                number_of_generations += 1;
+
+                system("cls");
+                PrintGrid();
+                std::cout << std::endl;
+                std::cout << "Number of generations: " << number_of_generations << std::endl;
+                waitForOneSecond();
             }
 
-            for (int i = 0; i < 5000; i++);
-            //Wait timer, to allow user to see each generation
+
+            system("cls");
+            PrintGrid();
+            std::cout << std::endl;
+            std::cout << "Simulation stopped; end of possible generations" << std::endl;
+            std::cout << "Number of generations: " << number_of_generations << std::endl;
+            return;
         }
     }
-
-    std::cout << std::endl;
-    std::cout << "Simulation stopped; end of possible generations";
 }
 
 char Life::GetGridValue(int location_y, int location_x)
@@ -102,10 +121,12 @@ void Life::ToggleCell(int y, int x)
 bool Life::ScanCells()
 {
     bool change_made = false;
+    
     for (int i = 0; i < m_size_y; i++)
     {
         for (int j = 0; j < m_size_x; j++)
         {
+            change_made = false;
             if (m_life_grid[i][j] == '*')
             {
                 if (CheckForOneOrLessLiveNeighbours(i, j) == true)
@@ -128,8 +149,6 @@ bool Life::ScanCells()
         }
     }
 
-    system("cls");
-    PrintGrid();
     if (change_made == true)
     {
         return true;
@@ -209,42 +228,42 @@ bool Life::CheckForThreeLiveNeighboursIfDead(int y, int x)
 int Life::ReturnLiveNeighboursCount(int y, int x)
 {
     if ((y - 1) >= 0)
-    {
+    { //Up
         m_current_surroundings[0] = m_life_grid[(y - 1)][x];
     }
 
-    if ((y + 1) <= 4)
-    {
+    if ((y + 1) <= (m_size_y - 1))
+    { //Down
         m_current_surroundings[1] = m_life_grid[(y + 1)][x];
     }
 
     if ((x - 1) >= 0)
-    {
+    { //Left
         m_current_surroundings[2] = m_life_grid[y][(x - 1)];
     }
 
-    if ((x + 1) <= 4)
-    {
+    if ((x + 1) <= (m_size_x - 1))
+    { //Right
         m_current_surroundings[3] = m_life_grid[y][(x + 1)];
     }
 
     if (((y - 1) >= 0) && ((x - 1) >= 0))
-    {
+    { //Up-left
         m_current_surroundings[4] = m_life_grid[(y - 1)][(x - 1)];
     }
 
-    if (((y + 1) <= 4) && ((x - 1) >= 0))
-    {
+    if (((y + 1) <= (m_size_y - 1)) && ((x - 1) >= 0))
+    { //Down-left
         m_current_surroundings[5] = m_life_grid[(y + 1)][(x - 1)];
     }
 
-    if (((y - 1) >= 0) && ((x + 1) <= 4))
-    {
+    if (((y - 1) >= 0) && ((x + 1) <= (m_size_x - 1)))
+    { //Up-right
         m_current_surroundings[6] = m_life_grid[(y - 1)][(x + 1)];
     }
 
-    if (((y + 1) <= 4) && ((x + 1) <= 4))
-    {
+    if (((y + 1) <= (m_size_y - 1)) && ((x + 1) <= (m_size_x - 1)))
+    { //Down-right
         m_current_surroundings[7] = m_life_grid[(y + 1)][(x + 1)];
     }
 
