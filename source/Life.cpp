@@ -5,19 +5,19 @@ Life::Life(int size_y, int size_x, int initalisation_state)
 {
     m_size_x = size_x;
     m_size_y = size_y;
-    std::vector< std::vector< int > > temp_grid(m_size_x, std::vector<int>(m_size_y));
+    std::vector< std::vector< int > > temp_grid(m_size_y, std::vector<int>(m_size_x));
     m_life_grid = temp_grid;
     InitaliseGrid();
-    if (initalisation_state == 0)
+    if (initalisation_state == 0) //User-chosen values; used with console menu
     {
         UserChosenStartLocations();
     }
-    else if (initalisation_state == 1)
+    else if (initalisation_state == 1) //Default values
     {
         InitalValues();
         
     }
-    else
+    else //Use 2, preferably
     {
         //Nothing; leaves grid initalised only with dead cells
         //Used for testing initalisation and different starting locations
@@ -31,7 +31,6 @@ Life::~Life()
 
 void Life::Start(int number_of_loops)
 {   
-    bool change_made_this_generation = false;
     int number_of_generations = 0;
 
     system("cls");
@@ -42,7 +41,6 @@ void Life::Start(int number_of_loops)
     {
         while (ScanCells() == true)
         {
-            change_made_this_generation = true;
             number_of_generations += 1;
 
             system("cls");
@@ -62,7 +60,6 @@ void Life::Start(int number_of_loops)
         {
             if (ScanCells() == true)
             {
-                change_made_this_generation = true;
                 number_of_generations += 1;
 
                 system("cls");
@@ -126,7 +123,6 @@ bool Life::ScanCells()
     {
         for (int j = 0; j < m_size_x; j++)
         {
-            change_made = false;
             if (m_life_grid[i][j] == '*')
             {
                 if (CheckForOneOrLessLiveNeighbours(i, j) == true)
@@ -161,15 +157,7 @@ bool Life::ScanCells()
 
 bool Life::CheckForOneOrLessLiveNeighbours(int y, int x)
 {
-    ReturnLiveNeighboursCount(y, x);
-    int live_neighbours_count = 0;
-    for (int i = 0; i < 8; i++)
-    {
-        if (m_current_surroundings[i] == '*')
-        {
-            live_neighbours_count += 1;
-        }
-    }
+    int live_neighbours_count = ReturnLiveNeighboursCount(y, x);
     if (live_neighbours_count <= 1)
     {
         ToggleCell(y, x);
@@ -227,6 +215,11 @@ bool Life::CheckForThreeLiveNeighboursIfDead(int y, int x)
 
 int Life::ReturnLiveNeighboursCount(int y, int x)
 {
+    for (int i = 0; i < 8; i++)
+    {
+        m_current_surroundings[i] = '.';
+    }
+
     if ((y - 1) >= 0)
     { //Up
         m_current_surroundings[0] = m_life_grid[(y - 1)][x];
