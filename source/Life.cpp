@@ -1,27 +1,12 @@
 #include "Life.h"
-std::vector< std::vector<int> > Life::m_life_grid = {};
 
-Life::Life(int size_y, int size_x, int initalisation_state)
+Life::Life(std::vector< std::vector<int>> temp_grid, int size_y, int size_x)
 {
     m_size_x = size_x;
     m_size_y = size_y;
-    std::vector< std::vector< int > > temp_grid(m_size_y, std::vector<int>(m_size_x));
-    m_life_grid = temp_grid;
-    InitaliseGrid();
-    if (initalisation_state == 0) //User-chosen values; used with console menu
-    {
-        UserChosenStartLocations();
-    }
-    else if (initalisation_state == 1) //Default values
-    {
-        InitalValues();
-        
-    }
-    else //Use 2, preferably
-    {
-        //Nothing; leaves grid initalised only with dead cells
-        //Used for testing initalisation and different starting locations
-    }
+
+    m_staging_grid = temp_grid;
+    StagingToActual();
 }
 
 Life::~Life()
@@ -85,33 +70,20 @@ char Life::GetGridValue(int location_y, int location_x)
     return m_life_grid[location_y][location_x];
 }
 
-void Life::InitaliseGrid()
+char Life::GetStagingGridValue(int location_y, int location_x)
 {
-    for (int i = 0; i < m_size_y; i++)
-    {
-        for (int j = 0; j < m_size_x; j++)
-        {
-            m_life_grid[i][j] = '.';
-        }
-    }
-}
-
-void Life::InitalValues()
-{
-    ToggleCell(1, 1);
-    ToggleCell(2, 1);
-    ToggleCell(2, 2);
+    return m_staging_grid[location_y][location_x];
 }
 
 void Life::ToggleCell(int y, int x)
 {
     if (m_life_grid[y][x] == '.')
     {
-        m_life_grid[y][x] = '*';
+        m_staging_grid[y][x] = '*';
     }
     else
     {
-        m_life_grid[y][x] = '.';
+        m_staging_grid[y][x] = '.';
     }
 }
 
@@ -144,6 +116,8 @@ bool Life::ScanCells()
             }
         }
     }
+
+    StagingToActual();
 
     if (change_made == true)
     {
@@ -281,7 +255,7 @@ void Life::PrintGrid()
         {
             if (m_life_grid[i][j] == '.')
             {
-                cout << '.' << '|';
+                cout << ' ' << '|';
             }
             else
             {
@@ -292,7 +266,90 @@ void Life::PrintGrid()
     }
 }
 
-void Life::UserChosenStartLocations()
+void Life::PrintStagingGrid()
+{
+    using namespace std;
+    for (int i = 0; i < m_size_y; i++)
+    {
+        cout << '|';
+        for (int j = 0; j < m_size_x; j++)
+        {
+            if (m_staging_grid[i][j] == '.')
+            {
+                cout << ' ' << '|';
+            }
+            else
+            {
+                cout << '*' << '|';
+            }
+        }
+        cout << endl;
+    }
+}
+
+void Life::StagingToActual()
+{
+    m_life_grid = m_staging_grid;
+}
+
+//Above Life
+//Below Grid
+
+Grid::Grid(int size_y, int size_x)
+{
+    m_size_y = size_y;
+    m_size_x = size_x;
+    
+    std::vector< std::vector< int > > temp_grid(size_y, std::vector<int>(size_x));
+    m_grid = temp_grid;
+
+    InitaliseGrid();
+}
+
+void Grid::InitaliseGrid()
+{
+    for (int i = 0; i < m_size_y; i++)
+    {
+        for (int j = 0; j < m_size_x; j++)
+        {
+            m_grid[i][j] = '.';
+        }
+    }
+}
+
+std::vector< std::vector<int>> Grid::return_grid()
+{
+    return m_grid;
+}
+
+char Grid::GetGridValue(int y, int x)
+{
+    return m_grid[y][x];
+}
+
+int Grid::GetSizeY()
+{
+    return m_size_y;
+}
+
+int Grid::GetSizeX()
+{
+    return m_size_x;
+}
+
+void Grid::ToggleCell(int y, int x)
+{
+    if (m_grid[y][x] == '.')
+    {
+        m_grid[y][x] = '*';
+    }
+    else
+    {
+        m_grid[y][x] = '.';
+    }
+}
+
+void Grid::UserChosenStartLocations()
 {
     using namespace std;
     int y, x;
@@ -356,5 +413,26 @@ void Life::UserChosenStartLocations()
                 throw invalid_argument("");
             }
         }
+    }
+}
+
+void Grid::PrintGrid()
+{
+    using namespace std;
+    for (int i = 0; i < m_size_y; i++)
+    {
+        cout << '|';
+        for (int j = 0; j < m_size_x; j++)
+        {
+            if (m_grid[i][j] == '.')
+            {
+                cout << ' ' << '|';
+            }
+            else
+            {
+                cout << '*' << '|';
+            }
+        }
+        cout << endl;
     }
 }

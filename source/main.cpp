@@ -90,8 +90,19 @@ int main()
             cerr << "Invalid Argument. Please enter valid input" << endl;
         }
     }
-    
-    Life Main(y, x, default_values);
+    Grid GameGrid(y, x);
+    if (default_values == false)
+    {
+        GameGrid.UserChosenStartLocations();
+    }
+    else
+    {
+        GameGrid.ToggleCell(1, 1);
+        GameGrid.ToggleCell(2, 1);
+        GameGrid.ToggleCell(2, 2);
+    }
+
+    Life Main(GameGrid.return_grid(), y, x);
     Main.Start(num_of_loops);
 
     char pause;

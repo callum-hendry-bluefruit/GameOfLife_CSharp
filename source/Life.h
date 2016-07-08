@@ -9,14 +9,37 @@
 #include <chrono>
 #include <thread>
 
-class TestLife;
+class Grid
+{
+protected:
+    std::vector< std::vector<int>> m_grid;
+
+private:
+    void InitaliseGrid();
+    void PrintGrid();
+    int m_size_y;
+    int m_size_x;
+public:
+    Grid(int size_y, int size_x);
+
+    std::vector< std::vector<int>> return_grid();
+
+    char GetGridValue(int y, int x);
+    int GetSizeY();
+    int GetSizeX();
+    
+    void ToggleCell(int y, int x);
+    void UserChosenStartLocations();
+};
+
+
 
 class Life
 {
 protected:
-    friend class TestLife;
-    static std::vector< std::vector<int> > m_life_grid;
-    static void ToggleCell(int y, int x);
+    std::vector< std::vector<int> > m_life_grid;
+    std::vector< std::vector<int> > m_staging_grid;
+    void ToggleCell(int y, int x);
 
 private:
     std::array<int, 8> m_current_surroundings;
@@ -26,7 +49,7 @@ private:
 
     void InitaliseGrid();
     void InitalValues();
-    void UserChosenStartLocations();
+    void StagingToActual();
 
     int ReturnLiveNeighboursCount(int, int);
 
@@ -36,18 +59,20 @@ private:
     bool CheckForThreeLiveNeighboursIfDead(int, int);
 
 public:
-    Life(int y, int x, int initalisation_state = 1); //initalisation_state; 1 or not provided for default start cells; 0 for user chosen; anything else (preferably 2) for only dead cells
+    Life(std::vector< std::vector<int> >, int size_y, int size_x);
     ~Life();
     void Start(int num_of_generations = 1); //if no variable, assume 1 for testing purposes
     void PrintGrid();
+    void PrintStagingGrid();
     char GetGridValue(int, int);
+    char GetStagingGridValue(int, int);
 };
 
 static void waitForOneSecond()
 {
     using namespace std::this_thread;
     using namespace std::chrono;
-    sleep_until(system_clock::now() + milliseconds(1000));
+    sleep_until(system_clock::now() + milliseconds(500));
 }
 
 #endif
