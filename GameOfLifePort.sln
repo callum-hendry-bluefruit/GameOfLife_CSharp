@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLifePort", "GameOfLifePort\GameOfLifePort.csproj", "{DDC785A0-DBA0-4612-A799-4103E2176007}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DB45ABF5-47B1-40D7-B7E0-A007BE35D9BA}"
+	ProjectSection(SolutionItems) = preProject
+		source\Life.cpp = source\Life.cpp
+		source\Life.h = source\Life.h
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSharpTests", "LifeSharpTests\LifeSharpTests.csproj", "{8D57EDF4-D345-429E-B7D4-269BAF097767}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDC785A0-DBA0-4612-A799-4103E2176007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDC785A0-DBA0-4612-A799-4103E2176007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDC785A0-DBA0-4612-A799-4103E2176007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDC785A0-DBA0-4612-A799-4103E2176007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D57EDF4-D345-429E-B7D4-269BAF097767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D57EDF4-D345-429E-B7D4-269BAF097767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D57EDF4-D345-429E-B7D4-269BAF097767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D57EDF4-D345-429E-B7D4-269BAF097767}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
