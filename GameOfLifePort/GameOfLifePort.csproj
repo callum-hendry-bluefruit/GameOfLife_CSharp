@@ -7,7 +7,7 @@
     <ProjectGuid>{DDC785A0-DBA0-4612-A799-4103E2176007}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameOfLifePort</RootNamespace>
+    <RootNamespace>GameOfLifeSharp</RootNamespace>
     <AssemblyName>GameOfLifePort</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,9 +51,11 @@
     <Compile Include="LifeSharpDisplay.Designer.cs">
       <DependentUpon>LifeSharpDisplay.cs</DependentUpon>
     </Compile>
-    <Compile Include="LifeSharpCode.cs" />
     <Compile Include="LifeSharpMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LifeSharpDisplay.resx">
+      <DependentUpon>LifeSharpDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -62,7 +64,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\Life.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

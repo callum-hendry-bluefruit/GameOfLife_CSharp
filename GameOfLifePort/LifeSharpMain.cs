@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameOfLifePort
+namespace GameOfLifeSharp
 {
     static class LifeSharpMain
     {
@@ -17,35 +17,32 @@ namespace GameOfLifePort
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LifeSharpDisplay());
+
             int y, x, num_of_loops;
             bool default_values = false;
             for (;;)
             {
                 try
                 {
-                    cout << "Enter two values for grid size. Recommended: 5 x 5" << endl;
+                    Console.WriteLine("Enter two values for grid size. Recommended: 5 x 5");
             
-                    cout << "Y: ";
-                    string y_preconversion;
-                    cin >> y_preconversion;
-                    cout << endl;
-                    y = stoi(y_preconversion);
+                    Console.Write("Y: ");
+                    y = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
 
-                    cout << "X: ";
-                    string x_preconversion;
-                    cin >> x_preconversion;
-                    cout << endl;
-                    x = stoi(x_preconversion);
+                    Console.Write("X: ");
+                    x = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
 
                     break;
                 }
-                catch (out_of_range)
+                catch (OverflowException)
                 {
-                    cerr << "Out of Range Error. Please input valid numbers" << endl;
+                    Console.WriteLine("Out of Range Error. Please enter number equal to or less than: ");
                 }
-                catch (invalid_argument)
+                catch (FormatException)
                 {
-                    cerr << "Invalid Argument. Please input valid numbers" << endl;
+                    Console.WriteLine("Invalid character was entered");
                 }
             }
 
@@ -53,21 +50,19 @@ namespace GameOfLifePort
             {
                 try
                 {
-                    cout << "Enter number of loops (0 to run until no changes in generation): ";
-                    string num_of_loops_preconversion;
-                    cin >> num_of_loops_preconversion;
-                    cout << endl;
-                    num_of_loops = stoi(num_of_loops_preconversion);
+                    Console.Write("Enter number of loops (0 to run until no changes in generation): ");
+                    num_of_loops = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
 
                     break;
                 }
-                catch (out_of_range)
+                catch (OverflowException)
                 {
-                    cerr << "Out of Range Error. Please input valid numbers" << endl;
+                    Console.WriteLine("Out of Range Error. Please enter number equal to or less than: ");
                 }
-                catch (invalid_argument)
+                catch (FormatException)
                 {
-                    cerr << "Invalid Argument. Please input valid numbers" << endl;
+                    Console.WriteLine("Invalid character was entered");
                 }
             }
 
@@ -75,14 +70,13 @@ namespace GameOfLifePort
             {
                 try
                 {
-                    cout << "Use default inital locations?" << endl;
-                    cout << "Y: 1, X: 1" << endl;
-                    cout << "Y: 2, X: 1" << endl;
-                    cout << "Y: 2, X: 2" << endl;
-                    cout << "Note: Only one (1) generation possible" << endl;
-                    cout << "Use defaults? (Y/N): ";
-                    string default_inital_values;
-                    cin >> default_inital_values;
+                    Console.WriteLine("Use default inital locations?");
+                    Console.WriteLine("Y: 1, X: 1");
+                    Console.WriteLine("Y: 2, X: 1");
+                    Console.WriteLine("Y: 2, X: 2");
+                    Console.Write("Note: Only one (1) generation possible");
+                    Console.Write("Use defaults? (Y/N): ");
+                    string default_inital_values = Console.ReadLine();
                     if (default_inital_values == "Y" || default_inital_values == "y")
                     {
                         default_values = true;
@@ -93,17 +87,17 @@ namespace GameOfLifePort
                     }
                     else
                     {
-                        throw invalid_argument("Input not Y or N");
+                        throw new FormatException("Input not Y or N");
                     }
 
                     break;
                 }
-                catch (invalid_argument)
+                catch (FormatException)
                 {
-                    cerr << "Invalid Argument. Please enter valid input" << endl;
+                    Console.WriteLine("Invalid character was entered");
                 }
             }
-            Grid GameGrid(y, x);
+            Grid GameGrid = new Grid(y, x);
             if (default_values == false)
             {
                 GameGrid.UserChosenStartLocations();
@@ -115,13 +109,10 @@ namespace GameOfLifePort
                 GameGrid.ToggleCell(2, 2);
             }
 
-            Life Main(GameGrid.return_grid(), y, x);
+            Life Main = new Life(GameGrid.ReturnGrid(), y, x);
             Main.Start(num_of_loops);
 
-            char pause;
-            cin >> pause;
-
-	        return 0;
+            string pause = Console.ReadLine();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameOfLifePort
+namespace GameOfLifeSharp
 {
     public partial class LifeSharpDisplay : Form
     {
